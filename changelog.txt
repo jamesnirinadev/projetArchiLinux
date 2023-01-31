@@ -4,15 +4,29 @@
 * -----------------------------------
 */
 
+
 /*
-** VRAC INFOS **
+** DOCUMENTATIONS & INFOS **
 * -----------------------------------
 */
 
 //php versus Virtual machine Debian
 j'ai vu ça : sys-admin.fr/comment-installer-php-8-1-sur-debian-11-debian-10-debian-9
 
-serveur Apache php
+https://www.it-connect.fr/installation-de-php-8-1-sur-debian-11-pour-son-serveur-web/
+
+
+
+/*
+** Serveur Apache php **
+* -----------------------------------
+*
+Bridge0
+machine (superuttilisateur): vmPhp;
+Mot de passe : password;
+Login user :  vmphpuser;
+Pass : password;
+
 
 
 Serveur mysql
