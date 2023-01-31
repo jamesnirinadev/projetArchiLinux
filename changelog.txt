@@ -1,0 +1,18 @@
+/**
+* -----------------------------------
+* |     Changelog FerdiJames        |
+* -----------------------------------
+*/
+
+/*
+** VRAC INFOS **
+* -----------------------------------
+*/
+
+//php versus Virtual machine Debian
+j'ai vu ça : sys-admin.fr/comment-installer-php-8-1-sur-debian-11-debian-10-debian-9
+
+
+
+
+
