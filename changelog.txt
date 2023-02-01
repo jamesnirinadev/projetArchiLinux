@@ -107,6 +107,7 @@ sudo apt-get install php8.1-common php8.1-curl php8.1-bcmath php8.1-intl php8.1-
 //-- Story 3 :
 //-----------
 Installer mysql sur vmMySQL
+
 (cf : https://www.cloudbooklet.com/how-to-install-mysql-on-debian-11/)
 
 ** Update du cache des paquets debian
@@ -116,7 +117,10 @@ sudo apt upgrade
 ** installer wget
 sudo apt install wget
 
-
+Installer mysql : 
+apt install mariadb-server
+////////////////////////////////////////////////////////////////////////////////////////////////
+à effacer
 ** télécharger le paquet deb sur le site officiel de Mysql
 https://dev.mysql.com/downloads/repo/apt/
 
