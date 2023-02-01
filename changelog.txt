@@ -14,13 +14,16 @@ sudo sudo/**
 
 
 //-- Story 0 :
+//-----------
 Installer sudo
 # apt install sudo
 
 
 //-- Story 1 :
+//-----------
 Installer serveur web Apache sur vmphp
 cf : https://www.digitalocean.com/community/tutorials/how-to-install-the-apache-web-server-on-debian-11
+
 ** update local package
 $ sudo apt update
 
@@ -64,6 +67,7 @@ $ nano /var/www/your_domain/index.html
 
 
 //-- Story 2 :
+//-----------
 Installer php 8.0 sur vmphp
 
 (Video ==> https://www.synonyme-du-mot.com/les-articles/comment-installer-php-sous-debian );
@@ -97,6 +101,82 @@ sudo systemctl restart apache2
 
 ** installation des extensions curl, ZIP, Interaction Mysql/Mariadb
 sudo apt-get install php8.1-common php8.1-curl php8.1-bcmath php8.1-intl php8.1-mbstring php8.1-xmlrpc php8.1-mcrypt php8.1-mysql php8.1-gd php8.1-xml php8.1-cli php8.1-zip
+
+
+
+//-- Story 3 :
+//-----------
+Installer mysql sur vmMySQL
+(cf : https://www.cloudbooklet.com/how-to-install-mysql-on-debian-11/)
+
+** Update du cache des paquets debian
+sudo apt update
+sudo apt upgrade
+
+** installer wget
+sudo apt install wget
+
+
+** télécharger le paquet deb sur le site officiel de Mysql
+https://dev.mysql.com/downloads/repo/apt/
+
+** télécharger le paquet
+wmget https://dev.mysql.com/get/mysql-apt-config_0.8.22-1_all.deb
+
+** installer le package
+sudo apt-get install ./mysql-apt-config_0.8.22-1_all.deb
+
+** installer mysql serveur
+sudo apt-get update
+sudo apt-get install mysql-server
+
+
+ ** vérifier que mysql serveur est démarrer
+ sudo systemctl mysql status OU service mysql status
+
+
+
+
+
+
+//-- Story 4 :
+//-----------
+tester la connection ssh de vmPhp sur vmMysql
+
+
+//-- Story 5 :
+//-----------
+Savoir utiliser les commandes MySQL depuis la virtual machine linux
+
+
+//-- Story 6 :
+//-----------
+Savoir utiliser php sous nano depuis la virtual machine linux
+
+
+
+//-- Story 7 :
+//-----------
+Créer une base de données Mysql à partir de vmPhp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
