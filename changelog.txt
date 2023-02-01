@@ -135,14 +135,13 @@ sudo apt-get install mysql-server
  sudo systemctl mysql status OU service mysql status
 
 
-
-test git
+nouveau test commit
 
 
 //-- Story 4 :
 //-----------
 tester la connection ssh de vmPhp sur vmMysql
-
+CLI ==> mysql -u root -p utilisateur@ipaddress
 
 //-- Story 5 :
 //-----------
