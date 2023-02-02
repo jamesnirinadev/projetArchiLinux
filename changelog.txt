@@ -16,12 +16,14 @@ sudo sudo/**
 //-- Story 0 :
 //-----------
 Installer sudo
+//-----------
 # apt install sudo
 
 
 //-- Story 1 :
 //-----------
 Installer serveur web Apache sur vmphp
+//-----------
 cf : https://www.digitalocean.com/community/tutorials/how-to-install-the-apache-web-server-on-debian-11
 
 ** update local package
@@ -30,27 +32,28 @@ $ sudo apt update
 ** install apache2 package
 $ sudo apt install apache2
 
+
+
+** FIREWALL /////////////////////
 ** authoriser les Firewall sur le port par défaut d'Apache "allow outside access to default web ports"
 $ sudo ufw app list
 
 ** authoriser le trafic sur le port 80
+$ sudo ufw allow 'WWW'
+
+** Vérifier les changements.
+$ sudo ufw status
+
 A savoir :
 The Apache profiles begin with WWW:
-
     WWW: This profile opens only port 80 (normal, unencrypted web traffic)
     WWW Cache: This profile opens only port 8080 (sometimes used for caching and web proxies)
     WWW Full: This profile opens both port 80 (normal, unencrypted web traffic) and port 443 (TLS/SSL encrypted traffic)
     WWW Secure: This profile opens only port 443 (TLS/SSL encrypted traffic)
 
-$ sudo ufw allow 'WWW'
-
-
-** Vérifier les changements.
-$ sudo ufw status
 
 ** Vérifier que le service fonctionne.
 $ sudo systemctl status apache2
-
 
 ** tester son adresse IP
 $ hostname -I
@@ -68,8 +71,8 @@ $ nano /var/www/your_domain/index.html
 
 //-- Story 2 :
 //-----------
-Installer php 8.0 sur vmphp
-
+Installer php (8.0) sur vmphp
+//-----------
 (Video ==> https://www.synonyme-du-mot.com/les-articles/comment-installer-php-sous-debian );
 (cf: https://packages.sury.org/php/);
 
@@ -79,7 +82,6 @@ $ sudo apt-get install ca-certificates apt-transport-https software-properties-c
 
 // ??????
 $ apt install apt-transport-https curl lsb-release
-
 ** installation de la clé apt.gpg
 $ curl -sSLo /usr/share/keyrings/debs.sury.orh-php.gpg https://packages.sury.org/php/apt.gpg
 // ??????
@@ -107,27 +109,30 @@ sudo apt-get install php8.1-common php8.1-curl php8.1-bcmath php8.1-intl php8.1-
 //-- Story 3 :
 //-----------
 Installer mysql sur vmMySQL
-
+//-----------
 (cf : https://www.cloudbooklet.com/how-to-install-mysql-on-debian-11/)
 
 ** Update du cache des paquets debian
 sudo apt update
 sudo apt upgrade
 
-** installer wget
+** Installer wget
 sudo apt install wget
 
-Installer mysql : 
+** Installer mysql :
 apt install mariadb-server
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 à effacer
-** télécharger le paquet deb sur le site officiel de Mysql
+** Télécharger le paquet deb sur le site officiel de Mysql
 https://dev.mysql.com/downloads/repo/apt/
 
-** télécharger le paquet
+** Télécharger le paquet
 wmget https://dev.mysql.com/get/mysql-apt-config_0.8.22-1_all.deb
 
-** installer le package
+** Installer le package
 sudo apt-get install ./mysql-apt-config_0.8.22-1_all.deb
 
 ** installer mysql serveur
@@ -139,32 +144,146 @@ sudo apt-get install mysql-server
  sudo systemctl mysql status OU service mysql status
 
 
-nouveau test commit
-
 
 //-- Story 4 :
 //-----------
 tester la connection ssh de vmPhp sur vmMysql
-CLI ==> mysql -u root -p utilisateur@ipaddress
+//-----------
+** Retrouver l'adresse IP Virtual Machine
+[contexte : Virtual Machine MySQL] ip a OU ip address
+
+** connecter Virtual machine Php à la virtual machine vmMysql
+ssh userNameVmMysSQL@IpVmMySQL
+
+
+** rentrer sur mysql depuis la Virtual machine
+mysql -u root -p  OU  mysql -u root -p utilisateur@addressIP
+
+
+
 
 //-- Story 5 :
 //-----------
-Savoir utiliser les commandes MySQL depuis la virtual machine linux
+Insérer le dossier du site web dans Virtual machine Php
+//-----------
+cf : https://uoa-eresearch.github.io/vmhandbook/doc/copy-file-linux.html;
+https://cloud.google.com/compute/docs/instances/transfer-files?hl=fr#scp;
+A SAVOIR --> bouger un dossier
+mv cheminFichieràCopier cheminFichierEnDestination
+
+
+
+
+** Charger des fichiers dans le dossier var/html/www
+// A SAVOIR
+scp -i ~/.ssh/my-ssh-key USERNAME@IP_ADDRESS:REMOTE_FILE_PATH LOCAL_FILE_PATH
+
+
+# Upload the file yourFile.xyz to your home directory on the VM
+$ scp yourFile.xyz username@cerzheprd03.its.auckland.ac.nz:~/.
+
+# Upload the folder yourFolder to your home directory on the VM
+$ scp -r yourFolder username@cerzheprd03.its.auckland.ac.nz:~/.
+
+Downloading files from your home directory on the login node to your home directory on your local machine is a similar process as shown below:
+# Download the file ~/yourFile.xyz to your home directory on your computer
+$ scp username@cerzheprd03.its.auckland.ac.nz:~/yourFile.xyz ~/.
+
+# Download the folder yourFolder to your home directory on your computer
+$ scp -r username@cerzheprd03.its.auckland.ac.nz:~/yourFolder ~/.
+
+
+scp -r /Users/admin/Desktop/mone vmphpuser@169.254.7.182:~/
+
+
+
+scp insta.png vmphpuser@169.254.7.182:/home/vmphpuser/
+
+
+ESSAI
+scp -i ~/var/html/www
+scp -i ~/ .ssh/ vmpuser@169.254.7.182:~/var/html/www Users/admin/desktop/insta.png
+
+
+
+// ** chemin local file path
+Users/admin/desktop/insta.png
+
+
+
+
+// A Savoir
+A partir du terminal du mac ==>
+scp cheminDuFichieràEnvoyer vmphpuser@AdresseIpVirtualPhpMachine:~/
+~/ correspond à /home/utilisateurPhp
+le fichier root en virtual machine correspond
+
+
 
 
 //-- Story 6 :
 //-----------
-Savoir utiliser php sous nano depuis la virtual machine linux
-
-
-
-//-- Story 7 :
+Insérer la base de données du site web dans Virtual machine MySQL
 //-----------
-Créer une base de données Mysql à partir de vmPhp
+** rentrer dans mysql
+mysql -u root -p
+
+** Créer une base de données Mysql vierge
+mysql> CREATE DATABASE NomDeLaDataBase
+
+
+** Vérifier la présence de la base de données
+mysql> USE mysql (pour se placer dans un endroit de la base. Ici nous nous plaçons à la racine)
+mysql> SHOW DATABASES;
+
+
+** Vérifier les colonnes de la bases de données
+mysql> SHOW TABLES FROM bddNames;
+
+
+
+** créer un utilisateur MySQL pour accèder à la base
+mysql> CREATE USER 'root'@'%localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+mysql> GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
+mysql> FLUSH PRIVILEGES;
+
+Pour vérifer les users.
+mysql> select user, host FROM mysql.user;
+
+
+EXEMPLES
+CREATE USER 'jusersql'@'ipAddressvirtualMachineSQL' IDENTIFIED BY 'jusersql123!';
+GRANT ALL PRIVILEGES bddName.* TO 'jusersql@ipAddressvirtualMachineSQL';
+
+
+SOIT ==>
+CREATE USER 'vmmysql'@'10.160.32.45' IDENTIFIED WITH mysql_native_password BY 'superPassword123!';
+
+CREATE USER 'john'@'10.160.32.45' IDENTIFIED BY 'password123!'
+
+
+CREATE USER 'usermysql'@'10.160.32.45' IDENTIFIED BY 'Password123!';
+
+GRANT ALL PRIVILEGES *.* TO 'usermysql@10.160.32.45';
 
 
 
 
+
+
+//-- Story 8 :
+//-----------
+Savoir utiliser php sous nano depuis la virtual machine linux
+/var/html/www/
+
+
+//-- Story 9 :
+//-----------
+
+
+
+//-- Story 10 :
+//-----------
 
 
 
@@ -222,6 +341,11 @@ Serveur mysql
 /*
 * php versus Virtual machine Debian
 */
+-- savoir si apache est en service
+systemctl status apache2
+
+
+
 
 
 //-- TUTO:
