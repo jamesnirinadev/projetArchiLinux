@@ -8,14 +8,14 @@ sudo sudo/**
 
 /*
 * -----------------------------------
-** I - STORIES & STAGE **
+** I - STORIES **
 * -----------------------------------
 */
 
 
 //-- Story 0 :
 //-----------
-Installer sudo
+Installer le module sudo
 //-----------
 # apt install sudo
 
@@ -26,7 +26,7 @@ Installer serveur web Apache sur vmphp
 //-----------
 cf : https://www.digitalocean.com/community/tutorials/how-to-install-the-apache-web-server-on-debian-11
 
-** update local package
+** update local package sudo
 $ sudo apt update
 
 ** install apache2 package
@@ -53,7 +53,14 @@ The Apache profiles begin with WWW:
 
 
 ** Vérifier que le service fonctionne.
-$ sudo systemctl status apache2
+$ systemctl status apache2.service
+$ systemctl status mysql.service
+
+** Démarrer Apache
+$ /etc/init.d/apache2 start
+
+** Démarrer mysql
+$ /etc/init.d/mysqld start
 
 ** tester son adresse IP
 $ hostname -I
@@ -141,7 +148,7 @@ sudo apt-get install mysql-server
 
 
  ** vérifier que mysql serveur est démarrer
- sudo systemctl mysql status OU service mysql status
+ systemctl mysql status OU service mysql status
 
 
 
@@ -159,7 +166,8 @@ ssh userNameVmMysSQL@IpVmMySQL
 ** rentrer sur mysql depuis la Virtual machine
 mysql -u root -p  OU  mysql -u root -p utilisateur@addressIP
 
-
+** Vérifier le port utiliser par MySQL
+mysql> show variables like 'port';
 
 
 //-- Story 5 :
@@ -175,15 +183,18 @@ mv cheminFichieràCopier cheminFichierEnDestination
 
 
 ** Charger des fichiers dans le dossier var/html/www
+A partir du terminal du mac ==>
+scp cheminDuFichieràEnvoyer vmphpuser@AdresseIpVirtualPhpMachine:~/
+~/ correspond à /home/utilisateurPhp
+le fichier root en virtual machine correspond
+
+
 // A SAVOIR
 scp -i ~/.ssh/my-ssh-key USERNAME@IP_ADDRESS:REMOTE_FILE_PATH LOCAL_FILE_PATH
 
 
-# Upload the file yourFile.xyz to your home directory on the VM
-$ scp yourFile.xyz username@cerzheprd03.its.auckland.ac.nz:~/.
-
-# Upload the folder yourFolder to your home directory on the VM
-$ scp -r yourFolder username@cerzheprd03.its.auckland.ac.nz:~/.
+# Upload the file or Folder yourFileOrFolder.xyz to your home directory on the VM
+$ scp yourFileOrFolder.xyz username@cerzheprd03.its.auckland.ac.nz:~/.
 
 Downloading files from your home directory on the login node to your home directory on your local machine is a similar process as shown below:
 # Download the file ~/yourFile.xyz to your home directory on your computer
@@ -192,32 +203,8 @@ $ scp username@cerzheprd03.its.auckland.ac.nz:~/yourFile.xyz ~/.
 # Download the folder yourFolder to your home directory on your computer
 $ scp -r username@cerzheprd03.its.auckland.ac.nz:~/yourFolder ~/.
 
-
-scp -r /Users/admin/Desktop/mone vmphpuser@169.254.7.182:~/
-
-
-
-scp insta.png vmphpuser@169.254.7.182:/home/vmphpuser/
-
-
-ESSAI
-scp -i ~/var/html/www
-scp -i ~/ .ssh/ vmpuser@169.254.7.182:~/var/html/www Users/admin/desktop/insta.png
-
-
-
-// ** chemin local file path
-Users/admin/desktop/insta.png
-
-
-
-
-// A Savoir
-A partir du terminal du mac ==>
-scp cheminDuFichieràEnvoyer vmphpuser@AdresseIpVirtualPhpMachine:~/
-~/ correspond à /home/utilisateurPhp
-le fichier root en virtual machine correspond
-
+EXEMPLES ==>
+$ scp -r /Users/admin/Desktop/mone vmphpuser@192.168.1.130:~/
 
 
 
@@ -247,26 +234,22 @@ mysql> CREATE USER 'root'@'%localhost' IDENTIFIED WITH mysql_native_password BY 
 mysql> GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
 mysql> FLUSH PRIVILEGES;
 
-Pour vérifer les users.
-mysql> select user, host FROM mysql.user;
-
-
-EXEMPLES
+EXEMPLES ==>
 CREATE USER 'jusersql'@'ipAddressvirtualMachineSQL' IDENTIFIED BY 'jusersql123!';
-GRANT ALL PRIVILEGES bddName.* TO 'jusersql@ipAddressvirtualMachineSQL';
-
+GRANT ALL PRIVILEGES ON bddName.* TO 'jusersql@ipAddressvirtualMachineSQL';
 
 SOIT ==>
 CREATE USER 'vmmysql'@'10.160.32.45' IDENTIFIED WITH mysql_native_password BY 'superPassword123!';
 
 CREATE USER 'john'@'10.160.32.45' IDENTIFIED BY 'password123!'
 
-
 CREATE USER 'usermysql'@'10.160.32.45' IDENTIFIED BY 'Password123!';
 
 GRANT ALL PRIVILEGES *.* TO 'usermysql@10.160.32.45';
 
 
+Pour vérifer les users.
+mysql> select user, host FROM mysql.user;
 
 
 
@@ -295,14 +278,6 @@ Savoir utiliser php sous nano depuis la virtual machine linux
 
 
 
-
-
-
-
-
-
-
-
 /*
 * -----------------------------------
 ** II - CONFIGURATIONS **
@@ -314,7 +289,6 @@ Savoir utiliser php sous nano depuis la virtual machine linux
 //-- debian :
 -----------------------------------
 Verison 11,6
-
 
 
 //-- Serveur Apache php **
@@ -337,12 +311,7 @@ Serveur mysql
 ** XN - DOCUMENTATIONS & INFOS **
 * -----------------------------------
 */
-
-/*
-* php versus Virtual machine Debian
-*/
--- savoir si apache est en service
-systemctl status apache2
+https://access.redhat.com/sites/default/files/attachments/rh_ip_command_cheatsheet_1214_jcs_print.pdf
 
 
 
@@ -359,3 +328,22 @@ https://www.it-connect.fr/installation-de-php-8-1-sur-debian-11-pour-son-serveur
 https://www.synonyme-du-mot.com/les-articles/comment-installer-php-sous-debian;
 
 
+
+
+** PROBLÈME ==> Mysql_PDO pas installer sur php 8.1
+--> La manipulation qui sauve:
+(cf : https://laracasts.com/discuss/channels/general-discussion/nginx-php-74-not-finding-pdo-driver)
+sudo apt-get install software-properties-common
+sudo add-apt-repository ppa:ondrej/php
+sudo apt-get update
+sudo apt-get install -y php8.1 php8.1-mysql
+
+** PROBLÈME ==> Erreur : pas de connexion à la base SQLSTATE[HY000] [1045] Access denied for user 'user'@'admins-mbp.home' (using password: YES)
+
+
+** Changer l'adresse IP des users dans la database
+update mysql.user set Host = 'newIP' where Host = 'oldIP';
+
+
+** Redémarrer serveur Apache2
+ systemctl restart apache2
